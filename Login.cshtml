@@ -1,0 +1,114 @@
+﻿@{
+        
+
+    Layout="~/Shared/_Layout5.cshtml";
+
+var username = "";
+var password = "";
+if(IsPost)
+    {
+    username = Request["username"];
+    password = Request["password"];
+    Session["username"]= username;
+
+        if(WebSecurity.Login(username, password))
+        {
+                Response.Redirect("~/Home");
+        }
+
+    }
+    var extra  = UrlData[0];
+}
+@section Styles
+{
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<meta name="keywords" content="Shoe Store, Free Template, templatemo.com" />
+<meta name="description" content="Shoe Store - Free Website Template provided by templatemo.com" />
+<link href="../templatemo_style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../stylesheet/styles.css" />
+
+<script lang="javascript" type="text/javascript">
+function clearText(field)
+{
+    if (field.defaultValue == field.value) field.value = '';
+    else if (field.value == '') field.value = field.defaultValue;
+}
+</script>
+
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2.1-core.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2-more.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/slideitmoo-1.1.js"></script>
+<script lang="javascript" type="text/javascript">
+	window.addEvents({
+		'domready': function(){
+			/* thumbnails example , div containers */
+			new SlideItMoo({
+						overallContainer: 'SlideItMoo_outer',
+						elementScrolled: 'SlideItMoo_inner',
+						thumbsContainer: 'SlideItMoo_items',		
+						itemsVisible: 6,
+						elemsSlide: 2,
+						duration: 160,
+						itemsSelector: '.SlideItMoo_element',
+						itemWidth: 140,
+						showControls:1 });
+		}
+		
+	});
+</script>
+
+        <script>
+            var nW,nH,oH,oW;   
+function zoomToggle(iWideSmall,iHighSmall,iWideLarge,iHighLarge,whichImage)   
+{   
+oW=whichImage.style.width;oH=whichImage.style.height;   
+if((oW==iWideLarge)||(oH==iHighLarge))   
+    {   
+  
+    nW=iWideSmall;   
+    nH=iHighSmall;   
+    }   
+else  
+    {   
+  
+    nW=iWideLarge;   
+    nH=iHighLarge;   
+    }   
+  
+whichImage.style.width=nW;   
+whichImage.style.height=nH;   
+}   
+</script>
+}
+
+
+        <title>Login</title>
+   
+@if(extra == "logout")
+{
+    <label style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" for="username">You have successfully logged out! </label><br />
+}
+ <div style="background: url(images/templatemo_body_top.png) repeat-xy; height:1000px;width: 1300px">
+     <a style="margin-left:1220px;margin-top:5px;font-size:20px;color:Black;font-family:Calibri;font-weight:bold" href="~/Register">[Sign Up]</a>
+      <br/> <br/> <h1>Login</h1>  
+     
+    
+<form action="login" method="post">
+<div>
+<label style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" for="username">Username: </label><br />
+<input style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" id="username" name="username" type="text" value="" />
+
+</div>
+<div>
+<label style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" for="password">Password: </label><br />
+<input style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" id="password" name="password" type="password" value=""/>
+
+</div>
+
+<div>
+<input style="margin-left:60px;margin-top:5px" type="submit" value="Login" />
+</div>
+</form>
+</div>
+

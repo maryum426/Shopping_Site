@@ -1,0 +1,29 @@
+﻿@{
+    
+    
+}
+<!DOCTYPE html>
+
+<html lang="en">
+   <head>
+   
+       @RenderSection("Styles")
+</head>
+    <body>
+
+        
+@RenderPage("_Header.cshtml")
+       @RenderSection("Slider")
+        <div id="templatemo_menu_wrapper">
+             @RenderBody()
+             @RenderPage("_Footer.cshtml")
+            </div>
+
+        
+       
+
+
+
+
+    </body>
+</html>

@@ -1,0 +1,227 @@
+﻿@{
+     Layout="~/Shared/_Layout.cshtml";
+
+     var db = Database.Open("Shoe Store");
+    var selectQueryString = "SELECT * FROM Products";
+    var data = db.Query(selectQueryString);
+
+
+    var selectQueryString1 = "SELECT * FROM Products WHERE Category=@0";
+
+    var ProductCat  = UrlData[0];
+
+   
+    int counter =0;
+    var data2 = db.Query(selectQueryString1, ProductCat);
+
+    
+}
+
+@section Styles
+{
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<meta name="keywords" content="Shoe Store, Free Template, templatemo.com" />
+<meta name="description" content="Shoe Store - Free Website Template provided by templatemo.com" />
+<link href="../templatemo_style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../stylesheet/styles.css" />
+
+<script lang="javascript" type="text/javascript">
+function clearText(field)
+{
+    if (field.defaultValue == field.value) field.value = '';
+    else if (field.value == '') field.value = field.defaultValue;
+}
+</script>
+
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2.1-core.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2-more.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/slideitmoo-1.1.js"></script>
+<script lang="javascript" type="text/javascript">
+	window.addEvents({
+		'domready': function(){
+			/* thumbnails example , div containers */
+			new SlideItMoo({
+						overallContainer: 'SlideItMoo_outer',
+						elementScrolled: 'SlideItMoo_inner',
+						thumbsContainer: 'SlideItMoo_items',		
+						itemsVisible: 6,
+						elemsSlide: 2,
+						duration: 160,
+						itemsSelector: '.SlideItMoo_element',
+						itemWidth: 140,
+						showControls:1 });
+		}
+		
+	});
+</script>
+
+        <script>
+            var nW,nH,oH,oW;   
+function zoomToggle(iWideSmall,iHighSmall,iWideLarge,iHighLarge,whichImage)   
+{   
+oW=whichImage.style.width;oH=whichImage.style.height;   
+if((oW==iWideLarge)||(oH==iHighLarge))   
+    {   
+  
+    nW=iWideSmall;   
+    nH=iHighSmall;   
+    }   
+else  
+    {   
+  
+    nW=iWideLarge;   
+    nH=iHighLarge;   
+    }   
+  
+whichImage.style.width=nW;   
+whichImage.style.height=nH;   
+}   
+</script>
+}
+
+@section Slider{
+<div id="templatemo_slider_wrapper">
+
+	<div id="templatemo_slider">
+    
+    	<div id="latest_product_slider">
+    
+            <div id="SlideItMoo_outer">	
+                <div id="SlideItMoo_inner">			
+                    <div id="SlideItMoo_items">
+                        @foreach(var j in data)
+                        {
+                        <div class="SlideItMoo_element">
+                                <a href="~/ProductDesc/@j.Id">
+                                <img src="@j.Image" alt="@j.Id" /></a>
+                           
+                        </div>	
+                                    }
+                    </div>			
+                </div>
+            </div>
+    	
+        </div> <!-- end of latest_product_slider -->
+    
+    </div> <!-- end of templatemo_slider -->
+
+</div> <!-- end of templatemo_slider_wrapper -->
+     
+}
+ <title>Products</title>
+
+
+<div class="content_section" style=" width: 940px;height: 1000px;margin: auto ">
+        
+    
+
+        	@if(User.IsInRole("Admin"))
+         {
+              if (ProductCat.IsEmpty()){
+                  
+             <h2 style="font-size: 25px">Products</h2>
+            <h2><a style="font-size:15px;color:Black;font-family:Calibri;font-weight:bold" href="~/InsertProducts">Add New Product</a></h2>
+             foreach (var row in data) {
+                
+                
+        	<div class="product_box margin_r40">
+                <div class="image_wrapper">
+               
+                
+                <a href="#" target="_parent"><img src="@row.Image" style="margin-left: 70px" alt="product"  /></a></div>
+              <h3>@row.Name</h3>
+                <!--<p>Nullam scelerisque odio ante, in facilisis mauris. Sed justo quam, sollicitudin vitae.</p>-->
+                <p class="price">Price: $@row.Price</p>
+                <a href="~/ProductDesc/@row.Id">Detail</a> | <a href="~/EditProducts/@row.Id">Edit</a>  | <a href="~/DeleteProduct/@row.Id">Remove</a> 
+            
+         	 </div>
+                  }
+                  }
+                  else 
+                  {
+                      <h2 style="font-size: 25px">@ProductCat</h2>
+            
+             foreach (var row in data2) {
+                
+                
+        	<div class="product_box margin_r40">
+                <div class="image_wrapper">
+               
+                
+                <a href="#" target="_parent"><img src="@row.Image" style="margin-left: 70px" alt="product"  /></a></div>
+              <h3>@row.Name</h3>
+                <!--<p>Nullam scelerisque odio ante, in facilisis mauris. Sed justo quam, sollicitudin vitae.</p>-->
+                <p class="price">Price: $@row.Price</p>
+                <a href="~/ProductDesc/@row.Id">Detail</a> | <a href="~/EditProducts/@row.Id">Edit</a>  | <a href="~/DeleteProduct/@row.Id">Remove</a> 
+                </div>  
+                }
+                }
+             
+         }
+         else if (User.IsInRole("Customer")){
+
+          if (ProductCat.IsEmpty()){
+               
+                   
+                       <br/><br/>
+                        <form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+                       <input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+<input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_viewcart_LG.gif"  name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt=""  src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                            </form>
+
+              <h2 style="font-size: 25px">Products</h2>
+
+             foreach (var row in data) {
+                
+                
+        	<div class="product_box margin_r40">
+                <div class="image_wrapper">
+               
+                
+                <a href="#" target="_parent"><img src="@row.Image" style="margin-left: 70px" alt="product"  /></a></div>
+              <h3>@row.Name</h3>
+                <!--<p>Nullam scelerisque odio ante, in facilisis mauris. Sed justo quam, sollicitudin vitae.</p>-->
+                <p class="price">Price: $@row.Price</p>
+                <a href="~/ProductDesc/@row.Id">Detail</a> | <form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+                <input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="@row.ButValue">
+<input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_cart_LG.gif"  name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt=""  src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                </form>
+
+               
+         	 </div>
+//counter++;
+                  }
+                     
+            }
+            else{
+                <h2 style="font-size: 25px">@ProductCat</h2>
+                foreach (var row in data2) { 
+        	<div class="product_box margin_r40">
+                <div class="image_wrapper">
+               
+                
+                <a href="#" target="_parent"><img src="@row.Image" style="margin-left: 70px" alt="product"  /></a></div>
+              <h3>@row.Name</h3>
+                <!--<p>Nullam scelerisque odio ante, in facilisis mauris. Sed justo quam, sollicitudin vitae.</p>-->
+                <p class="price">Price: $@row.Price</p>
+                <a href="~/ProductDesc/@row.Id">Detail</a> | <form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                                <input type="hidden" name="hosted_button_id" value="@row.ButValue">
+                                <input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_cart_LG.gif" " name="submit" alt="PayPal - The safer, easier way to pay online!">
+                                <img alt=""  src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1"> 
+                </form> 
+            
+         	 </div>
+                  }
+            }
+            }
+        </div>
+    
+    
+

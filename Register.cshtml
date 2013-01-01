@@ -1,0 +1,127 @@
+﻿@{
+        
+
+    Layout="~/Shared/_Layout5.cshtml";
+    
+
+var username = "";
+var password1 = "";
+var password2 = "";
+
+if(IsPost)
+{
+//WebSecurity.Logout();
+username = Request["username"];
+password1 = Request["password1"];
+password2 = Request["password2"];
+
+        if(!WebSecurity.UserExists(username))
+        {
+       
+        WebSecurity.CreateUserAndAccount(username, password1);
+        if (Request["username"]=="admin")
+            {    
+                Roles.AddUserToRole(Request["username"],"Admin");
+                Response.Redirect("~/Login");
+            }
+            else 
+            {
+                Roles.AddUserToRole(Request["username"],"Customer");
+                Response.Redirect("~/Login");
+            }
+        
+       // WebSecurity.CreateUserAndAccount(username, password1, null, false);
+       // WebSecurity.Login(username, password1);
+      //  Response.Redirect("default");
+        }
+}
+
+}
+
+@section Styles
+{
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<meta name="keywords" content="Shoe Store, Free Template, templatemo.com" />
+<meta name="description" content="Shoe Store - Free Website Template provided by templatemo.com" />
+<link href="../templatemo_style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../stylesheet/styles.css" />
+
+<script lang="javascript" type="text/javascript">
+function clearText(field)
+{
+    if (field.defaultValue == field.value) field.value = '';
+    else if (field.value == '') field.value = field.defaultValue;
+}
+</script>
+
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2.1-core.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2-more.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/slideitmoo-1.1.js"></script>
+<script lang="javascript" type="text/javascript">
+	window.addEvents({
+		'domready': function(){
+			/* thumbnails example , div containers */
+			new SlideItMoo({
+						overallContainer: 'SlideItMoo_outer',
+						elementScrolled: 'SlideItMoo_inner',
+						thumbsContainer: 'SlideItMoo_items',		
+						itemsVisible: 6,
+						elemsSlide: 2,
+						duration: 160,
+						itemsSelector: '.SlideItMoo_element',
+						itemWidth: 140,
+						showControls:1 });
+		}
+		
+	});
+</script>
+
+        <script>
+            var nW,nH,oH,oW;   
+function zoomToggle(iWideSmall,iHighSmall,iWideLarge,iHighLarge,whichImage)   
+{   
+oW=whichImage.style.width;oH=whichImage.style.height;   
+if((oW==iWideLarge)||(oH==iHighLarge))   
+    {   
+  
+    nW=iWideSmall;   
+    nH=iHighSmall;   
+    }   
+else  
+    {   
+  
+    nW=iWideLarge;   
+    nH=iHighLarge;   
+    }   
+  
+whichImage.style.width=nW;   
+whichImage.style.height=nH;   
+}   
+</script>
+}
+
+
+        <title>Register</title>
+  
+
+ <div style="background: url(images/templatemo_body_top.png) repeat-xy; height:1000px;width: 2000px">
+ <br/> <br/><h1>Register</h1>
+<form action="register" method="post">
+<div>
+<label style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" for="username">Username: </label><br />
+<input style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" id="username" name="username" type="text" value="" />
+</div>
+<div>
+<label style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" for="password1">Password: </label><br />
+<input style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" id="password1" name="password1" type="password" value="" />
+</div>
+<div>
+<label style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" for="password2">Confirm Password: </label><br />
+<input style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" id="password2" name="password2" type="password" value="" />
+</div>
+<div>
+<input style="margin-left:60px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" type="submit" value="Register" />
+</div>
+</form>
+</div>

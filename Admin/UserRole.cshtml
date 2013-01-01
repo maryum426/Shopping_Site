@@ -1,0 +1,21 @@
+﻿@{
+    if(IsPost)
+    {
+        Roles.AddUserToRole(Request["userName"], Request["roleName"]);
+    }
+    
+}
+
+<form action="" method="post">
+
+<label for="userName">User Name: </label>
+<input id="userName" name="userName" type="text" value="" />
+
+
+<label for="roleName">Role Name: </label>
+<input id="roleName" name="roleName" type="text" value="" />
+
+<input type="submit" value="Add User to Role" name="addUserRole" />
+
+
+</form>

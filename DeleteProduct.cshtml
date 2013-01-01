@@ -1,0 +1,129 @@
+﻿@{
+      Layout="~/Shared/_Layout.cshtml";
+
+       var db = Database.Open("Shoe Store");
+       var ProductId = UrlData[0];
+      if (ProductId.IsEmpty()) {
+          Response.Redirect("~/Products");
+      }
+      var prod = db.QuerySingle("SELECT * FROM Products WHERE ID = @0", ProductId);
+      if( IsPost && !ProductId.IsEmpty()) {
+        var deleteQueryString = "DELETE FROM Products WHERE Id=@0";
+        db.Execute(deleteQueryString, ProductId);
+        Response.Redirect("~/Products");
+
+         
+  }
+
+  var selectQueryString5 = "SELECT * FROM Products";
+         var data = db.Query(selectQueryString5);
+}
+
+@section Styles
+{
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Shoe Store - Free Template</title>
+<meta name="keywords" content="Shoe Store, Free Template, templatemo.com" />
+<meta name="description" content="Shoe Store - Free Website Template provided by templatemo.com" />
+<link href="../templatemo_style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../stylesheet/styles.css" />
+
+<script lang="javascript" type="text/javascript">
+function clearText(field)
+{
+    if (field.defaultValue == field.value) field.value = '';
+    else if (field.value == '') field.value = field.defaultValue;
+}
+</script>
+
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2.1-core.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2-more.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/slideitmoo-1.1.js"></script>
+<script lang="javascript" type="text/javascript">
+	window.addEvents({
+		'domready': function(){
+			/* thumbnails example , div containers */
+			new SlideItMoo({
+						overallContainer: 'SlideItMoo_outer',
+						elementScrolled: 'SlideItMoo_inner',
+						thumbsContainer: 'SlideItMoo_items',		
+						itemsVisible: 6,
+						elemsSlide: 2,
+						duration: 160,
+						itemsSelector: '.SlideItMoo_element',
+						itemWidth: 140,
+						showControls:1 });
+		}
+		
+	});
+</script>
+
+        <script>
+            var nW,nH,oH,oW;   
+function zoomToggle(iWideSmall,iHighSmall,iWideLarge,iHighLarge,whichImage)   
+{   
+oW=whichImage.style.width;oH=whichImage.style.height;   
+if((oW==iWideLarge)||(oH==iHighLarge))   
+    {   
+  
+    nW=iWideSmall;   
+    nH=iHighSmall;   
+    }   
+else  
+    {   
+  
+    nW=iWideLarge;   
+    nH=iHighLarge;   
+    }   
+  
+whichImage.style.width=nW;   
+whichImage.style.height=nH;   
+}   
+</script>
+}
+
+@section Slider{
+<div id="templatemo_slider_wrapper">
+
+	<div id="templatemo_slider">
+    
+    	<div id="latest_product_slider">
+    
+            <div id="SlideItMoo_outer">	
+                <div id="SlideItMoo_inner">			
+                    <div id="SlideItMoo_items">
+                        @foreach(var j in data)
+                        {
+                        <div class="SlideItMoo_element">
+                                <a href="~/ProductDesc/@j.Id">
+                                <img src="@j.Image" alt="@j.Id" /></a>
+                           
+                        </div>	
+                                    }
+                    </div>			
+                </div>
+            </div>
+    	
+        </div> <!-- end of latest_product_slider -->
+    
+    </div> <!-- end of templatemo_slider -->
+
+</div> <!-- end of templatemo_slider_wrapper -->
+     
+}
+
+<title>Delete Product</title>
+   
+<div style="background: url(images/templatemo_body_top.png) repeat-x ;width: 940px;height: 602px;margin: auto ">
+<h1>Delete Product - Confirmation</h1>
+  <form method="post" action="" name="form">
+    <p style="margin-left:60px;margin-top:55px;font-size:25px;color:Black;font-family:Calibri;font-weight: normal">Are you sure you want to delete the following product?</p>
+
+    <p style="margin-left:60px;margin-top:55px;font-size:20px;color:Black;font-family:Calibri;font-weight:bold">Name: @prod.Name <br /><br/>
+       Description: @prod.Category <br /><br />
+       Price: $@prod.Price<br /><br />
+       Gender: @prod.Gender <br /><br />
+    </p>
+    <p><input style="margin-left:60px;margin-top:55px;font-size:20px;color:Black;font-family:Calibri;font-weight: normal" type="submit" value="Delete" /></p>
+  </form>
+</div>

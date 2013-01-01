@@ -1,0 +1,219 @@
+﻿@{
+        
+
+    Layout="~/Shared/_Layout.cshtml";
+    
+     Validation.RequireField("Name", "Product name is required.");
+    Validation.RequireField("Category", "Product category is required.");
+    Validation.RequireField("Price", "Product price is required.");
+    Validation.RequireField("Gender", "Gender is required.");
+     Validation.RequireField("Quantity", "Product quantity is required.");
+      Validation.RequireField("ButValue", "Button value is required.");
+
+    var db = Database.Open("Shoe Store");
+    var Name = Request.Form["Name"];
+    var Category = Request.Form["Category"];
+    var Price = Request.Form["Price"];
+    var Gender = Request.Form["Gender"];
+    var Quantity = Request.Form["Quantity"];
+    var butvalue = Request.Form["ButValue"];
+    
+    WebImage photo = null;
+    var newFileName = "";
+    var imagePath = "";
+
+    if(IsPost){
+       <!-- <p>"File Count  = " @Request.Files.Count</p>-->
+        photo = WebImage.GetImageFromRequest();
+        if(photo != null){
+            newFileName =    Path.GetFileName(photo.FileName);
+            
+            imagePath = @"images/" + newFileName;
+           
+            photo.Save(@"~\" + imagePath);
+            
+        }
+    }
+  var Image = "../images/" + newFileName;
+
+    if (IsPost && Validation.IsValid()) {
+        // Define the insert query. The values to assign to the
+        // columns in the Product table are defined as parameters
+        // with the VALUES keyword.
+        if(ModelState.IsValid) {
+            var insertQuery = "INSERT INTO Products (Name, Category, Price, Image, Gender,Quantity,ButValue) " +
+                "VALUES (@0, @1, @2, @3, @4)";
+            db.Execute(insertQuery,Name,Category,Price,Image,Gender,Quantity,butvalue);
+
+            Response.Redirect("~/Products");
+            
+        }
+    }
+
+    var selectQueryString = "SELECT * FROM Products";
+    var data = db.Query(selectQueryString);
+
+    var selectQueryString4 = "SELECT * FROM Category";
+    var data2 = db.Query(selectQueryString4);
+
+}
+
+@section Styles
+{
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Shoe Store - Free Template</title>
+<meta name="keywords" content="Shoe Store, Free Template, templatemo.com" />
+<meta name="description" content="Shoe Store - Free Website Template provided by templatemo.com" />
+<link href="../templatemo_style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../stylesheet/styles.css" />
+
+<script lang="javascript" type="text/javascript">
+function clearText(field)
+{
+    if (field.defaultValue == field.value) field.value = '';
+    else if (field.value == '') field.value = field.defaultValue;
+}
+</script>
+
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2.1-core.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2-more.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/slideitmoo-1.1.js"></script>
+<script lang="javascript" type="text/javascript">
+	window.addEvents({
+		'domready': function(){
+			/* thumbnails example , div containers */
+			new SlideItMoo({
+						overallContainer: 'SlideItMoo_outer',
+						elementScrolled: 'SlideItMoo_inner',
+						thumbsContainer: 'SlideItMoo_items',		
+						itemsVisible: 6,
+						elemsSlide: 2,
+						duration: 160,
+						itemsSelector: '.SlideItMoo_element',
+						itemWidth: 140,
+						showControls:1 });
+		}
+		
+	});
+</script>
+
+        <script>
+            var nW,nH,oH,oW;   
+function zoomToggle(iWideSmall,iHighSmall,iWideLarge,iHighLarge,whichImage)   
+{   
+oW=whichImage.style.width;oH=whichImage.style.height;   
+if((oW==iWideLarge)||(oH==iHighLarge))   
+    {   
+  
+    nW=iWideSmall;   
+    nH=iHighSmall;   
+    }   
+else  
+    {   
+  
+    nW=iWideLarge;   
+    nH=iHighLarge;   
+    }   
+  
+whichImage.style.width=nW;   
+whichImage.style.height=nH;   
+}   
+</script>
+}
+
+@section Slider{
+<div id="templatemo_slider_wrapper">
+
+	<div id="templatemo_slider">
+    
+    	<div id="latest_product_slider">
+    
+            <div id="SlideItMoo_outer">	
+                <div id="SlideItMoo_inner">			
+                    <div id="SlideItMoo_items">
+                        @foreach(var j in data)
+                        {
+                        <div class="SlideItMoo_element">
+                                <a href="~/ProductDesc/@j.Id">
+                                <img src="@j.Image" alt="@j.Id" /></a>
+                           
+                        </div>	
+                                    }
+                    </div>			
+                </div>
+            </div>
+    	
+        </div> <!-- end of latest_product_slider -->
+    
+    </div> <!-- end of templatemo_slider -->
+
+</div> <!-- end of templatemo_slider_wrapper -->
+     
+}
+
+
+<title>Add Products</title>
+ <style type="text/css">
+    label {float:left; width: 8em; text-align: right;
+           margin-right: 0.5em;}
+    fieldset {padding: 1em; border: 1px solid; width: 50em;}
+    legend {padding: 2px 4px; border: 1px solid; font-weight:bold;}
+    .validation-summary-errors {font-weight:bold; color:red;
+           font-size: 11pt;}
+ </style>
+ <div style="background: url(images/templatemo_body_top.png) repeat-x ;width: 940px;height: 602px;margin: auto ">
+ 
+
+ <div  style="background: url(images/templatemo_body_top.png) repeat-y repeat-x ;width: 2000px;height: 600px ">
+ <h1>Add New Product</h1>
+
+ @Html.ValidationSummary("Errors with your submission:")
+
+ <form method="post" action="" enctype="multipart/form-data">
+   <fieldset>
+     <legend style="margin-left: 40px">Add Product</legend>
+     <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Name:</label>
+       <input  style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" name="Name" type="text" size="30" value="@Name" />
+     </div>
+     <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Category:</label>
+       <select   name="Category" style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">
+           <option value="Empty"></option>           
+            @foreach(var k in data2)
+           {
+               <option value="@k.Category">@k.Category</option>
+           }
+       </select>  
+     </div>
+     <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Price:</label>
+       <input  style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" name="Price" type="text" size="30" value="@Price" />
+     </div>
+       <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Image:</label>
+       <input  style="margin-left:5px;margin-top:5px" name="Image" type="file" />
+     </div>
+       <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Gender:</label>
+       <input  style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" name="Gender" type="text" size="30" value="@Gender" />
+     </div>
+        <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Quantity:</label>
+       <input  style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" name="Quantity" type="text" size="30" value="@Quantity" />
+     </div>
+       <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Button Value:</label>
+       <input  style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" name="ButValue" type="text" size="30" value="@butvalue" />
+     </div>
+     <div>
+       <label>&nbsp;</label>
+         <br/>
+       <input style="margin-left:150px" type="submit" value="Insert" class="submit" />
+     </div>
+       
+   </fieldset>
+ </form>
+
+        </div>
+</div>

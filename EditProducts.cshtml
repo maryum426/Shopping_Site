@@ -1,0 +1,200 @@
+﻿@{
+     Layout="~/Shared/_Layout.cshtml";
+
+     var db = Database.Open("Shoe Store");
+    var Name = Request.Form["Name"];
+    var Category = Request.Form["Category"];
+    var Price = Request.Form["Price"];
+    var Gender = Request.Form["Gender"];
+    
+    WebImage photo = null;
+    var newFileName = "";
+    var imagePath = "";
+
+    var productid = UrlData[0];
+
+     var selectQueryString = "SELECT * FROM Products WHERE Id=@0";
+      var prod = db.QuerySingle(selectQueryString, productid);
+
+    if(IsPost){
+       <!-- <p>"File Count  = " @Request.Files.Count</p>-->
+        photo = WebImage.GetImageFromRequest();
+        if(photo != null){
+            newFileName =    Path.GetFileName(photo.FileName);
+            
+            imagePath = @"images/" + newFileName;
+           
+            photo.Save(@"~\" + imagePath);
+            
+        }
+    }
+  var Image = "../images/" + newFileName;
+
+    if (IsPost) {
+        if(ModelState.IsValid) {
+            var updateQuery = "UPDATE Products SET Name=@0, Category=@1, Price=@2, Image=@3, Gender=@4 WHERE Id=@5";
+            db.Execute(updateQuery,Name,Category,Price,Image,Gender,productid);
+
+            Response.Redirect("~/Products");
+            
+        }
+    }
+
+    var selectQueryString5 = "SELECT * FROM Products";
+    var data = db.Query(selectQueryString5);
+
+    var selectQueryString4 = "SELECT * FROM Category";
+    var data2 = db.Query(selectQueryString4);
+}
+
+@section Styles
+{
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<meta name="keywords" content="Shoe Store, Free Template, templatemo.com" />
+<meta name="description" content="Shoe Store - Free Website Template provided by templatemo.com" />
+<link href="../templatemo_style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../stylesheet/styles.css" />
+
+<script lang="javascript" type="text/javascript">
+function clearText(field)
+{
+    if (field.defaultValue == field.value) field.value = '';
+    else if (field.value == '') field.value = field.defaultValue;
+}
+</script>
+
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2.1-core.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/mootools-1.2-more.js"></script>
+<script lang="javascript" type="text/javascript" src="../scripts/slideitmoo-1.1.js"></script>
+<script lang="javascript" type="text/javascript">
+	window.addEvents({
+		'domready': function(){
+			/* thumbnails example , div containers */
+			new SlideItMoo({
+						overallContainer: 'SlideItMoo_outer',
+						elementScrolled: 'SlideItMoo_inner',
+						thumbsContainer: 'SlideItMoo_items',		
+						itemsVisible: 6,
+						elemsSlide: 2,
+						duration: 160,
+						itemsSelector: '.SlideItMoo_element',
+						itemWidth: 140,
+						showControls:1 });
+		}
+		
+	});
+</script>
+
+        <script>
+            var nW,nH,oH,oW;   
+function zoomToggle(iWideSmall,iHighSmall,iWideLarge,iHighLarge,whichImage)   
+{   
+oW=whichImage.style.width;oH=whichImage.style.height;   
+if((oW==iWideLarge)||(oH==iHighLarge))   
+    {   
+  
+    nW=iWideSmall;   
+    nH=iHighSmall;   
+    }   
+else  
+    {   
+  
+    nW=iWideLarge;   
+    nH=iHighLarge;   
+    }   
+  
+whichImage.style.width=nW;   
+whichImage.style.height=nH;   
+}   
+</script>
+}
+
+@section Slider{
+<div id="templatemo_slider_wrapper">
+
+	<div id="templatemo_slider">
+    
+    	<div id="latest_product_slider">
+    
+            <div id="SlideItMoo_outer">	
+                <div id="SlideItMoo_inner">			
+                    <div id="SlideItMoo_items">
+                        @foreach(var j in data)
+                        {
+                        <div class="SlideItMoo_element">
+                                <a href="~/ProductDesc/@j.Id">
+                                <img src="@j.Image" alt="@j.Id" /></a>
+                           
+                        </div>	
+                                    }
+                    </div>			
+                </div>
+            </div>
+    	
+        </div> <!-- end of latest_product_slider -->
+    
+    </div> <!-- end of templatemo_slider -->
+
+</div> <!-- end of templatemo_slider_wrapper -->
+     
+}
+
+
+<title>Edit Products</title>
+ <style type="text/css">
+    label {float:left; width: 8em; text-align: right;
+           margin-right: 0.5em;}
+    fieldset {padding: 1em; border: 1px solid; width: 50em;}
+    legend {padding: 2px 4px; border: 1px solid; font-weight:bold;}
+    .validation-summary-errors {font-weight:bold; color:red;
+           font-size: 11pt;}
+ </style>
+ <div style="background: url(images/templatemo_body_top.png) repeat-x ;width: 940px;height: 602px;margin: auto ">
+ 
+
+ <div  style="background: url(images/templatemo_body_top.png) repeat-y repeat-x ;width: 2000px;height: 600px ">
+ <h1>Edit Product</h1>
+
+ @Html.ValidationSummary("Errors with your submission:")
+
+ <form method="post" action="" enctype="multipart/form-data">
+   <fieldset>
+     <legend style="margin-left: 40px">Update Product</legend>
+     <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Name:</label>
+       <input  style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" name="Name" type="text" size="30" value="@prod.Name" />
+     </div>
+     <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Category:</label>
+       <select   name="Category" style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">
+           <option value="Empty"></option>           
+            @foreach(var k in data2)
+           {
+               <option value="@k.Category">@k.Category</option>
+           }
+       </select>  
+     </div>
+     <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Price:</label>
+       <input  style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" name="Price" type="text" size="30" value="@prod.Price" />
+     </div>
+       <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Image:</label>
+       <input  style="margin-left:5px;margin-top:5px" name="Image" type="file" />
+     </div>
+       <div>
+       <label style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold">Gender:</label>
+       <input  style="margin-left:5px;margin-top:5px;font-size:15px;color:Black;font-family:Calibri;font-weight:bold" name="Gender" type="text" size="30" value="@prod.Gender" />
+     </div>
+     <div>
+       <label>&nbsp;</label>
+         <br/>
+       <input style="margin-left:150px" type="submit" value="Update" class="submit" />
+     </div>
+       
+   </fieldset>
+ </form>
+
+        </div>
+</div>

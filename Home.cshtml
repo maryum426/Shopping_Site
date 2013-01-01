@@ -1,0 +1,195 @@
+﻿@{
+    Layout="~/Shared/_Layout.cshtml";
+    
+     var db = Database.Open("Shoe Store");
+    var selectQueryString = "SELECT * FROM Products";
+    var data = db.Query(selectQueryString);
+    var coun = 0;
+
+    var selectQueryString1 = "SELECT * FROM Category";
+    var data2 = db.Query(selectQueryString1);
+    var count = 0;
+
+    
+    
+}
+
+@section Styles
+{
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Online Shoe Store</title>
+<meta name="keywords" content="Shoe Store, Free Template, templatemo.com" />
+<meta name="description" content="Shoe Store - Free Website Template provided by templatemo.com" />
+<link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="stylesheet/styles.css" />
+
+<script lang="javascript" type="text/javascript">
+function clearText(field)
+{
+    if (field.defaultValue == field.value) field.value = '';
+    else if (field.value == '') field.value = field.defaultValue;
+}
+</script>
+
+<script lang="javascript" type="text/javascript" src="scripts/mootools-1.2.1-core.js"></script>
+<script lang="javascript" type="text/javascript" src="scripts/mootools-1.2-more.js"></script>
+<script lang="javascript" type="text/javascript" src="scripts/slideitmoo-1.1.js"></script>
+<script lang="javascript" type="text/javascript">
+	window.addEvents({
+		'domready': function(){
+			/* thumbnails example , div containers */
+			new SlideItMoo({
+						overallContainer: 'SlideItMoo_outer',
+						elementScrolled: 'SlideItMoo_inner',
+						thumbsContainer: 'SlideItMoo_items',		
+						itemsVisible: 6,
+						elemsSlide: 2,
+						duration: 160,
+						itemsSelector: '.SlideItMoo_element',
+						itemWidth: 140,
+						showControls:1 });
+		}
+		
+	});
+</script>
+
+        <script>
+            var nW,nH,oH,oW;   
+function zoomToggle(iWideSmall,iHighSmall,iWideLarge,iHighLarge,whichImage)   
+{   
+oW=whichImage.style.width;oH=whichImage.style.height;   
+if((oW==iWideLarge)||(oH==iHighLarge))   
+    {   
+  
+    nW=iWideSmall;   
+    nH=iHighSmall;   
+    }   
+else  
+    {   
+  
+    nW=iWideLarge;   
+    nH=iHighLarge;   
+    }   
+  
+whichImage.style.width=nW;   
+whichImage.style.height=nH;   
+}   
+</script>
+}
+
+@section Slider{
+<div id="templatemo_slider_wrapper">
+
+	<div id="templatemo_slider">
+    
+    	<div id="latest_product_slider">
+    
+            <div id="SlideItMoo_outer">	
+                <div id="SlideItMoo_inner">			
+                    <div id="SlideItMoo_items">
+                        @foreach(var j in data)
+                        {
+                        <div class="SlideItMoo_element">
+                                <a href="~/ProductDesc/@j.Id">
+                                <img src="@j.Image" alt="@j.Id" /></a>
+                           
+                        </div>	
+                                    }
+                    </div>			
+                </div>
+            </div>
+    	
+        </div> <!-- end of latest_product_slider -->
+    
+    </div> <!-- end of templatemo_slider -->
+
+</div> <!-- end of templatemo_slider_wrapper -->
+     
+}
+ <title>Home</title>
+
+<div id="templatemo_content_wrapper">
+
+	<div id="templatmeo_sidebar">
+    	    
+    	<div class="sidebar_section">
+       		<br></br>
+            <br></br>
+            <h2>Categories</h2>
+       	
+       		<div class="sidebar_section_content">
+                    
+                <ul class="categories_list">
+                    @foreach(var i in data2)
+                    {
+                    <li><a href="~/Products/@i.Category">@i.Category</a></li>
+                    }
+                </ul>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p align="center"><img src="images/kvchostingbadge.png" width="134" height="51" alt="o" /></p>
+       		</div>
+             
+        </div>
+
+	</div> <!-- end of templatemo_slider -->         
+    
+    <div id="templatemo_content">
+    
+    	<div class="content_section">
+        
+        	<h2>Welcome to the Shoe Store</h2>
+            
+            <p>We all know that the best things in life require shoes. And not just any shoes, but the right pair. That comfortable pair. You know, those cozy slippers for lazy Sunday mornings, running shoes for your first marathon, dress shoes for that dream interview or even hiking boots for the family camping trip. So come on in and let ShoesOnline.com help you find the perfect Rockport shoes, Born shoes, Dansko and more.</p>
+            
+            
+            
+      </div>
+        
+        <div class="content_section">
+        
+        	<h2>New Products</h2>
+          
+             @foreach (var row in data) {
+                 if(coun>=4){break;}
+                 if(coun%2==0)
+                 {
+        	<div class="product_box margin_r40">
+                <div class="image_wrapper">
+               
+                
+                <a href="#" target="_parent"><img src="@row.Image" style="margin-left: 70px" alt="product"  /></a></div>
+              <h3>@row.Name</h3>
+                <!--<p>Nullam scelerisque odio ante, in facilisis mauris. Sed justo quam, sollicitudin vitae.</p>-->
+                <p class="price">Price: $@row.Price</p>
+                <a href="~/ProductDesc/@row.Id">Detail</a>
+            
+         	 </div>
+                }
+                else{
+              
+                    <div class="product_box">
+                    
+                <div class="image_wrapper"><a href="#" target="_parent"><img src="@row.Image"  style="margin-left: 70px" alt="product" /></a></div>
+                <h3>@row.Name</h3>
+                <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dictum ultricies purus.</p>-->
+                <p class="price">Price: $@row.Price</p>
+                <a href="~/ProductDesc/@row.Id">Detail</a>
+                      
+                    </div>
+                    
+                    <div class="cleaner"></div>
+                    }
+                    coun++;
+                    }
+                  
+        </div>
+    
+    </div> <!-- end of templatemo_content -->
+
+	<div class="cleaner">
+	  <p>&nbsp;</p>
+    </div>
+    
+</div> <!-- end of templatemo_content_wrapper -->
+<div id="templatemo_content_wrapper_bottom"></div>
